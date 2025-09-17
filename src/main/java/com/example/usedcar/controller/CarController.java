@@ -22,6 +22,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cars")
+@CrossOrigin(origins = "http://localhost:5173")
 public class CarController {
     private final CarService service;
 
@@ -67,12 +68,13 @@ public class CarController {
     }
 
     @GetMapping("/search")
-    public List<Car> searchCars(
+    public Page<Car> searchCars(
             @RequestParam(required = false) String make,
             @RequestParam(required = false) String model,
             @RequestParam(required = false) Double minPrice,
-            @RequestParam(required = false) Double maxPrice) {
-        return service.searchCars(make, model, minPrice, maxPrice);
+            @RequestParam(required = false) Double maxPrice,
+            Pageable pageable) {
+        return service.searchCars(make, model, minPrice, maxPrice, pageable);
     }
 
     @GetMapping("/{id}")

@@ -21,13 +21,13 @@ public class CarService {
         return repository.findAll(pageable);
     }
 
-    public List<Car> searchCars(String make, String model, Double minPrice, Double maxPrice) {
-        return repository.searchCars(make, model, minPrice, maxPrice);
+    public Page<Car> searchCars(String make, String model, Double minPrice, Double maxPrice, Pageable pageable) {
+        return repository.searchCars(make, model, minPrice, maxPrice, pageable);
     }
 
-    public List<Car> getAllCars() {
-        return repository.findAll();
-    }
+//    public List<Car> getAllCars() {
+//        return repository.findAll();
+//    }
 
     public Car getCarById(Long id) {
         return repository.findById(id).orElse(null);

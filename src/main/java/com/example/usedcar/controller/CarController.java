@@ -2,6 +2,7 @@ package com.example.usedcar.controller;
 
 import com.example.usedcar.model.Car;
 import com.example.usedcar.service.CarService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,8 @@ public class CarController {
 
     @PostMapping("/{id}/upload-image")
     public ResponseEntity<?> uploadCarImage(@PathVariable Long id,
-                                            @RequestParam("image")MultipartFile file) {
+                                            @RequestParam("image")MultipartFile file,
+                                            HttpServletRequest request) {
         try {
             Car car = service.getCarById(id);
             if(car == null) {
@@ -44,10 +46,14 @@ public class CarController {
             Files.createDirectories(path.getParent());
             Files.write(path, file.getBytes());
 
-            car.setImageUrl(filename);
+            String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" +
+                    request.getServerPort();
+            String imageUrl = baseUrl + "/api/cars/images" + filename;
+
+            car.setImageUrl(imageUrl);
             service.addCar(car);
 
-            return ResponseEntity.ok(Map.of("imageUrl", filename));
+            return ResponseEntity.ok(Map.of("imageUrl", imageUrl));
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading image");
         }

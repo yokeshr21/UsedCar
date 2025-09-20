@@ -48,7 +48,7 @@ public class CarController {
 
             String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" +
                     request.getServerPort();
-            String imageUrl = baseUrl + "/api/cars/images" + filename;
+            String imageUrl = baseUrl + "/api/cars/images/" + filename;
 
             car.setImageUrl(imageUrl);
             service.addCar(car);
